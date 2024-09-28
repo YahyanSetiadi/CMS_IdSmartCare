@@ -1,6 +1,15 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BisnisOwner } from 'src/bisnis-owner/bisnis-owner.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
-@Entity('bo_infos') 
+@Entity('bo_infos')
 export class BoInfos {
   @PrimaryGeneratedColumn({ type: 'bigint', unsigned: true })
   id: number;
@@ -47,9 +56,25 @@ export class BoInfos {
   @Column({ type: 'varchar', length: 255, nullable: true })
   status: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  // untuk reason
+  @Column({ type: 'text', nullable: true })
+  reason: string;
+
+  @CreateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+  })
   created_at: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
   updated_at: Date;
+
+  // Relasi dengan bisnis_owner
+  @OneToOne(() => BisnisOwner, (bisnisOwner) => bisnisOwner.boInfos)
+  @JoinColumn({ name: 'bisnis_owner_id' }) // Tambahkan ini untuk mendefinisikan kolom join
+  bisnisOwner: BisnisOwner;
 }

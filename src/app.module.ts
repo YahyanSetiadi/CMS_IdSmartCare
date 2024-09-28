@@ -8,6 +8,7 @@ import { BisnisOwnerModule } from './bisnis-owner/bisnis-owner.module';
 import { FasyankesModule } from './fasyankes/fasyankes.module';
 import { BoInfosModule } from './bo-infos/bo-infos.module';
 import { LegalDokumenModule } from './legal-dokumen/legal-dokumen.module';
+import { AuthModule } from './access-console/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LegalDokumenModule } from './legal-dokumen/legal-dokumen.module';
     FasyankesModule,
     BoInfosModule,
     LegalDokumenModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

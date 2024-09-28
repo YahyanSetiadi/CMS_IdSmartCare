@@ -14,7 +14,9 @@ export class BisnisOwnerService {
 
   // service untuk mengambil semua data bisnis_owners GET
   async findAll(): Promise<BisnisOwner[]> {
-    return this.bisnisOwnerRepository.find();
+    return this.bisnisOwnerRepository.find({
+      relations: ['boInfos', 'legalDokumen'] ,
+    });
   }
 
   // service untuk menyimpan data bisnis_owners baru POST

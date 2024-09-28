@@ -3,6 +3,8 @@ import { BisnisOwner } from './bisnis-owner/bisnis-owner.entity';
 import { Fasyankes } from './fasyankes/fasyankes.entity';
 import { BoInfos } from './bo-infos/bo-infos.entity';
 import { LegalDokumen } from './legal-dokumen/legal-dokumen.entity';
+import { AccessConsole } from './access-console/entities/access-console.entity';
+
 export const config: TypeOrmModuleOptions = {
   type: 'postgres',
   host: '127.0.0.1',
@@ -11,9 +13,11 @@ export const config: TypeOrmModuleOptions = {
   password: '',
   database: 'bisnis-owner',
   // entities: ['dist/**/*.entity{.ts,.js}'],
-  entities: [BisnisOwner, Fasyankes, BoInfos, LegalDokumen],
+  entities: [BisnisOwner, Fasyankes, BoInfos, LegalDokumen, AccessConsole],
   synchronize: false,
+  // migrationsRun: true,
   // synchronize: true, //compainies(id, name, city, location)
   logging: true,
-  logger: 'advanced-console', // Log SQL queries executed by TypeORM
+  logger: 'advanced-console',
+   // Log SQL queries executed by TypeORM
 };

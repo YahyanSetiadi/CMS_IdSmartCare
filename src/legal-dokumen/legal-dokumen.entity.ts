@@ -1,4 +1,13 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { BisnisOwner } from 'src/bisnis-owner/bisnis-owner.entity';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToOne,
+  JoinColumn,
+  UpdateDateColumn,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('legal_doc_bo')
 export class LegalDokumen {
@@ -29,9 +38,21 @@ export class LegalDokumen {
   @Column({ type: 'varchar', length: 255, nullable: true })
   status: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  // reason
+  @Column({ type: 'text', nullable: true })
+  reason: string;
+
+  @CreateDateColumn({ type: 'timestamp', nullable: true })
   created_at: Date;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @UpdateDateColumn({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP(6)',
+    onUpdate: 'CURRENT_TIMESTAMP(6)',
+  })
   updated_at: Date;
+
+  @OneToOne(() => BisnisOwner, (bisnisOwner) => bisnisOwner.legalDokumen)
+  @JoinColumn({ name: 'bisnis_owner_id' }) // Tambahkan ini untuk mendefinisikan kolom join
+  bisnisOwner: BisnisOwner;
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BoInfos } from './bo-infos.entity';
@@ -16,15 +16,28 @@ export class BoInfosService {
   }
 
   // update status
-  async updateStatus(id: number, newStatus: string): Promise<BoInfos> {
-    const boInfos = await this.boInfosRepository.findOne({
-      where: { id },
-    });
-    if (!boInfos) {
-      throw new Error('Data Not Found');
+  async updateStatus(id: number, status: string, reason?: string): Promise<BoInfos> {
+    const boInfo = await this.boInfosRepository.findOne({ where: { id } });
+
+    if (!boInfo) {
+      throw new NotFoundException(`BoInfos dengan ID ${id} tidak ditemukan`);
     }
-    boInfos.status = newStatus;
-    await this.boInfosRepository.save(boInfos);
-    return boInfos;
+
+    // Update status dan reason 
+    boInfo.status = status;
+
+    if (['pending', 'reject'].includes(status)) {
+      boInfo.reason = reason; 
+    } else {
+      boInfo.reason = null; 
+    }
+
+    // Simpan perubahan ke database
+    return this.boInfosRepository.save(boInfo);
+  }
+
+  // relation
+  async findAll(): Promise<BoInfos[]> {
+    return this.boInfosRepository.find({ relations: ['bisnisOwner'] });
   }
 }
