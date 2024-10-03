@@ -1,4 +1,12 @@
-import { Controller, Get, Param, Put, Body, UseGuards, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  Put,
+  Body,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { LegalDokumenService } from './legal-dokumen.service';
 import { LegalDokumen } from './legal-dokumen.entity';
 import { JwtAuthGuard } from 'src/access-console/guards/jwt-auth.guard';
@@ -29,7 +37,7 @@ export class LegalDokumenController {
     @Body('status') status: string,
     @Body('reason') reason?: string,
   ): Promise<LegalDokumen> {
-    if(['pending', 'reject'].includes(status) &&!reason) {
+    if (['pending', 'rejected'].includes(status) && !reason) {
       throw new BadRequestException('Alasan wajib diisi.');
     }
 

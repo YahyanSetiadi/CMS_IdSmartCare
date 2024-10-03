@@ -38,7 +38,7 @@ export class BoInfosController {
     @Body('reason') reason?: string, // Reason bersifat opsional
   ): Promise<BoInfos> {
     // Validasi untuk status "Pending" atau "Reject"
-    if (['pending', 'reject'].includes(status) && !reason) {
+    if (['pending', 'rejected'].includes(status) && !reason) {
       throw new BadRequestException('Alasan wajib diisi.');
     }
 

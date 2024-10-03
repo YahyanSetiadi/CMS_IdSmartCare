@@ -26,7 +26,7 @@ export class BoInfosService {
     // Update status dan reason 
     boInfo.status = status;
 
-    if (['pending', 'reject'].includes(status)) {
+    if (['pending', 'rejected'].includes(status)) {
       boInfo.reason = reason; 
     } else {
       boInfo.reason = null; 

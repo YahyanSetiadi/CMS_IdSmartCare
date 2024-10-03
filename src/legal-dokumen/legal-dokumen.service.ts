@@ -32,7 +32,7 @@ export class LegalDokumenService {
 
     LegalDokumen.status = newStatus;
 
-    if (['pending', 'reject'].includes(newStatus)) {
+    if (['pending', 'rejected'].includes(newStatus)) {
       LegalDokumen.reason = reason;
     } else {
       LegalDokumen.reason = null;
