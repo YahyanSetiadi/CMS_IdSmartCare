@@ -21,10 +21,17 @@ let BisnisOwnerService = class BisnisOwnerService {
     constructor(bisnisOwnerRepository) {
         this.bisnisOwnerRepository = bisnisOwnerRepository;
     }
-    async findAll() {
-        return this.bisnisOwnerRepository.find({
+    async findAll(status) {
+        const options = {
             relations: ['boInfos', 'legalDokumen'],
-        });
+        };
+        if (status) {
+            options.where = [
+                { boInfos: { status: status } },
+                { legalDokumen: { status: status } },
+            ];
+        }
+        return this.bisnisOwnerRepository.find(options);
     }
     async create(createDto) {
         const newOwner = this.bisnisOwnerRepository.create(createDto);

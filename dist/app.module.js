@@ -17,17 +17,20 @@ const fasyankes_module_1 = require("./fasyankes/fasyankes.module");
 const bo_infos_module_1 = require("./bo-infos/bo-infos.module");
 const legal_dokumen_module_1 = require("./legal-dokumen/legal-dokumen.module");
 const auth_module_1 = require("./access-console/auth/auth.module");
+const access_fasyankes_module_1 = require("./access_fasyankes/access_fasyankes.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forRoot(orm_config_1.config),
+        imports: [
+            typeorm_1.TypeOrmModule.forRoot(orm_config_1.config),
             bisnis_owner_module_1.BisnisOwnerModule,
             fasyankes_module_1.FasyankesModule,
             bo_infos_module_1.BoInfosModule,
             legal_dokumen_module_1.LegalDokumenModule,
             auth_module_1.AuthModule,
+            access_fasyankes_module_1.AccessFasyankesModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

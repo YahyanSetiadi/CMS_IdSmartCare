@@ -53,6 +53,6 @@ export class LegalDokumen {
   updated_at: Date;
 
   @OneToOne(() => BisnisOwner, (bisnisOwner) => bisnisOwner.legalDokumen)
-  @JoinColumn({ name: 'bisnis_owner_id' }) 
+  @JoinColumn({ name: 'bisnis_owner_id' })
   bisnisOwner: BisnisOwner;
 }

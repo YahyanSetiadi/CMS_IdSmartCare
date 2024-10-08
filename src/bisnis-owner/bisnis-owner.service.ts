@@ -13,10 +13,19 @@ export class BisnisOwnerService {
   ) {}
 
   // service untuk mengambil semua data bisnis_owners GET
-  async findAll(): Promise<BisnisOwner[]> {
-    return this.bisnisOwnerRepository.find({
-      relations: ['boInfos', 'legalDokumen'] ,
-    });
+  async findAll(status?: string): Promise<BisnisOwner[]> {
+    const options: any = {
+      relations: ['boInfos', 'legalDokumen'],
+    };
+  
+    if (status) {
+      options.where = [
+        { boInfos: { status: status } },
+        { legalDokumen: { status: status } }, // Ini menambahkan kondisi OR
+      ];
+    }
+  
+    return this.bisnisOwnerRepository.find(options);
   }
 
   // service untuk menyimpan data bisnis_owners baru POST
@@ -49,4 +58,6 @@ export class BisnisOwnerService {
     // Save the updated bisnis owner to the database
     return this.bisnisOwnerRepository.save(bisnisOwner);
   }
+
+
 }

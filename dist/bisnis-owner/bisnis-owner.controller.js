@@ -22,8 +22,9 @@ let BisnisOwnerController = class BisnisOwnerController {
     constructor(bisnisOwnerService) {
         this.bisnisOwnerService = bisnisOwnerService;
     }
-    async getAllBisnisOwners() {
-        return this.bisnisOwnerService.findAll();
+    async getAllBisnisOwners(status) {
+        const owners = await this.bisnisOwnerService.findAll(status);
+        return { data: owners };
     }
     async create(createDto) {
         return this.bisnisOwnerService.create(createDto);
@@ -47,8 +48,9 @@ exports.BisnisOwnerController = BisnisOwnerController;
 __decorate([
     (0, common_1.Get)(),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    __param(0, (0, common_1.Query)('status')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], BisnisOwnerController.prototype, "getAllBisnisOwners", null);
 __decorate([

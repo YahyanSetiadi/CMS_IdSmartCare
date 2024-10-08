@@ -9,16 +9,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FasyankesModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const fasyankes_entity_1 = require("./fasyankes.entity");
 const fasyankes_controller_1 = require("./fasyankes.controller");
 const fasyankes_service_1 = require("./fasyankes.service");
-const fasyankes_entity_1 = require("./fasyankes.entity");
 let FasyankesModule = class FasyankesModule {
 };
 exports.FasyankesModule = FasyankesModule;
 exports.FasyankesModule = FasyankesModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([fasyankes_entity_1.Fasyankes])],
-        exports: [typeorm_1.TypeOrmModule],
         controllers: [fasyankes_controller_1.FasyankesController],
         providers: [fasyankes_service_1.FasyankesService],
     })

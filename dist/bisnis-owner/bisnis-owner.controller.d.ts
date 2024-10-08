@@ -5,7 +5,9 @@ import { UpdateBisnisOwnerDto } from './update-bisnis-owner.dto';
 export declare class BisnisOwnerController {
     private readonly bisnisOwnerService;
     constructor(bisnisOwnerService: BisnisOwnerService);
-    getAllBisnisOwners(): Promise<BisnisOwner[]>;
+    getAllBisnisOwners(status: string): Promise<{
+        data: BisnisOwner[];
+    }>;
     create(createDto: CreateBisnisOwnerDto): Promise<BisnisOwner>;
     delete(id: number): Promise<{
         massage: string;
