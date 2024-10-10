@@ -15,6 +15,11 @@ export class FasyankesController {
     @Query('search') search: string = '',
     @Query('is_active') is_active: boolean,
   ): Promise<any> {
-    return this.fasyankesService.findAll(Number(page), Number(limit), search, is_active);
+    return this.fasyankesService.findAll(
+      Number(page),
+      Number(limit),
+      search,
+      is_active,
+    );
   }
 }

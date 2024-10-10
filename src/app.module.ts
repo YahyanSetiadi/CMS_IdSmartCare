@@ -9,6 +9,9 @@ import { BoInfosModule } from './bo-infos/bo-infos.module';
 import { LegalDokumenModule } from './legal-dokumen/legal-dokumen.module';
 import { AuthModule } from './access-console/auth/auth.module';
 import { AccessFasyankesModule } from './access_fasyankes/access_fasyankes.module';
+import { HitoryLegalDocController } from './history-legal-doc/history-legal-doc.controller';
+import { HistoryLegalDocModule } from './history-legal-doc/history-legal-doc.module';
+import { HistoryBoInfoModule } from './history-bo-info/history-bo-info.module';
 
 @Module({
   imports: [
@@ -19,6 +22,8 @@ import { AccessFasyankesModule } from './access_fasyankes/access_fasyankes.modul
     LegalDokumenModule,
     AuthModule,
     AccessFasyankesModule,
+    HistoryLegalDocModule,
+    HistoryBoInfoModule
   ],
   controllers: [AppController],
   providers: [AppService],
