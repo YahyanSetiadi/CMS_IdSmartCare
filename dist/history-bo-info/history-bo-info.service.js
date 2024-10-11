@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const history_bo_info_entity_1 = require("./history-bo-info.entity");
 const typeorm_2 = require("typeorm");
+const class_transformer_1 = require("class-transformer");
 let HistoryBoInfoService = class HistoryBoInfoService {
     constructor(historyBoInfoRepository) {
         this.historyBoInfoRepository = historyBoInfoRepository;
@@ -26,6 +27,15 @@ let HistoryBoInfoService = class HistoryBoInfoService {
             .createQueryBuilder('history_bo_info')
             .leftJoinAndSelect('history_bo_info.boInfo', 'bo_infos')
             .leftJoinAndSelect('bo_infos.bisnisOwner', 'bisnis_owners');
+        const statusMapping = {
+            disetujui: 'approved',
+            ditolak: 'rejected',
+            perbaikan: 'pending',
+            terdaftar: 'apply',
+            ditinjau: 'on review'
+        };
+        const lowerSearch = search.toLowerCase();
+        const mappedSearch = statusMapping[lowerSearch] || lowerSearch;
         if (start_date && end_date) {
             const startOfDay = new Date(start_date);
             startOfDay.setHours(0, 0, 0, 0);
@@ -37,13 +47,14 @@ let HistoryBoInfoService = class HistoryBoInfoService {
             });
         }
         if (search) {
-            queryBuilder.andWhere('LOWER(history_bo_info.status) LIKE LOWER(:search) OR LOWER(history_bo_info.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)', {
+            queryBuilder.andWhere('LOWER(history_bo_info.status) LIKE LOWER(:mappedSearch) OR LOWER(history_bo_info.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)', {
+                mappedSearch: `%${mappedSearch}%`,
                 search: `%${search.toLowerCase()}%`,
             });
         }
         const skip = (page - 1) * limit;
         queryBuilder.skip(skip).take(limit);
-        const [result, total] = await queryBuilder
+        const [items, total] = await queryBuilder
             .select([
             'history_bo_info.id',
             'history_bo_info.status',
@@ -53,13 +64,13 @@ let HistoryBoInfoService = class HistoryBoInfoService {
             'bisnis_owners.name',
         ])
             .getManyAndCount();
-        return {
-            data: result,
-            total,
-            page,
-            limit,
+        const results = {
+            data: (0, class_transformer_1.classToPlain)(items),
+            totalItems: total,
+            curentPage: page,
             totalPages: Math.ceil(total / limit),
         };
+        return results;
     }
 };
 exports.HistoryBoInfoService = HistoryBoInfoService;

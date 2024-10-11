@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HistoryLegalDoc } from './history-legal-doc.entity';
 import { Repository } from 'typeorm';
+import { instanceToPlain } from 'class-transformer';
 
 @Injectable()
 export class HistoryLegalDocService {
@@ -21,6 +22,19 @@ export class HistoryLegalDocService {
       .createQueryBuilder('history_legal_doc')
       .leftJoinAndSelect('history_legal_doc.boInfo', 'boInfo') // Join ke bo_infos
       .leftJoinAndSelect('boInfo.bisnisOwner', 'bisnisOwner'); // Join ke bisnis_owners
+
+    // Mapping status bahasa Indonesia ke bahasa Inggris
+    const statusMapping: { [key: string]: string } = {
+      disetujui: 'approved',
+      ditolak: 'rejected',
+      perbaikan: 'pending',
+      terdaftar: 'apply',
+      ditinjau: 'on review'
+    };
+
+    // Ubah nilai search berdasarkan mapping
+    const lowerSearch = search.toLowerCase();
+    const mappedSearch = statusMapping[lowerSearch] || lowerSearch; // Default ke search jika tidak ada di mapping
 
     // Filter berdasarkan tanggal jika ada start_date dan end_date
     if (start_date && end_date) {
@@ -42,9 +56,10 @@ export class HistoryLegalDocService {
     // Pencarian berdasarkan status atau petugas jika parameter search diberikan
     if (search) {
       queryBuilder.andWhere(
-        'LOWER(history_legal_doc.status) LIKE LOWER(:search) OR LOWER(history_legal_doc.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)',
+        'LOWER(history_legal_doc.status) LIKE LOWER(:mappedSearch) OR LOWER(history_legal_doc.petugas) LIKE LOWER(:search) OR LOWER(bisnisOwner.name) LIKE LOWER(:search)',
         {
-          search: `%${search.toLowerCase()}%`, // Change to toLowerCase
+          mappedSearch: `%${mappedSearch}%`, // Menggunakan hasil mapping status
+          search: `%${search.toLowerCase()}%`, // Tetap menggunakan original search untuk petugas dan nama bisnis
         },
       );
     }
@@ -54,7 +69,7 @@ export class HistoryLegalDocService {
     queryBuilder.skip(skip).take(limit);
 
     // Eksekusi query dan kembalikan hasilnya
-    const [result, total] = await queryBuilder
+    const [items, total] = await queryBuilder
       .select([
         'history_legal_doc.id',
         'history_legal_doc.status',
@@ -66,12 +81,13 @@ export class HistoryLegalDocService {
       .getManyAndCount();
 
     //   mengembalikan hasil pagination
-    return {
-      data: result,
-      total,
-      page,
-      limit,
+    const results = {
+      data: instanceToPlain(items),
+      totalItems: total,
+      curentPage: page,
       totalPages: Math.ceil(total / limit),
     };
+
+    return results;
   }
 }

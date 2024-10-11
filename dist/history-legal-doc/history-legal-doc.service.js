@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const history_legal_doc_entity_1 = require("./history-legal-doc.entity");
 const typeorm_2 = require("typeorm");
+const class_transformer_1 = require("class-transformer");
 let HistoryLegalDocService = class HistoryLegalDocService {
     constructor(historyLegalDocRepository) {
         this.historyLegalDocRepository = historyLegalDocRepository;
@@ -26,6 +27,15 @@ let HistoryLegalDocService = class HistoryLegalDocService {
             .createQueryBuilder('history_legal_doc')
             .leftJoinAndSelect('history_legal_doc.boInfo', 'boInfo')
             .leftJoinAndSelect('boInfo.bisnisOwner', 'bisnisOwner');
+        const statusMapping = {
+            disetujui: 'approved',
+            ditolak: 'rejected',
+            perbaikan: 'pending',
+            terdaftar: 'apply',
+            ditinjau: 'on review'
+        };
+        const lowerSearch = search.toLowerCase();
+        const mappedSearch = statusMapping[lowerSearch] || lowerSearch;
         if (start_date && end_date) {
             const startOfDay = new Date(start_date);
             startOfDay.setHours(0, 0, 0, 0);
@@ -37,13 +47,14 @@ let HistoryLegalDocService = class HistoryLegalDocService {
             });
         }
         if (search) {
-            queryBuilder.andWhere('LOWER(history_legal_doc.status) LIKE LOWER(:search) OR LOWER(history_legal_doc.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)', {
+            queryBuilder.andWhere('LOWER(history_legal_doc.status) LIKE LOWER(:mappedSearch) OR LOWER(history_legal_doc.petugas) LIKE LOWER(:search) OR LOWER(bisnisOwner.name) LIKE LOWER(:search)', {
+                mappedSearch: `%${mappedSearch}%`,
                 search: `%${search.toLowerCase()}%`,
             });
         }
         const skip = (page - 1) * limit;
         queryBuilder.skip(skip).take(limit);
-        const [result, total] = await queryBuilder
+        const [items, total] = await queryBuilder
             .select([
             'history_legal_doc.id',
             'history_legal_doc.status',
@@ -53,13 +64,13 @@ let HistoryLegalDocService = class HistoryLegalDocService {
             'bisnisOwner.name',
         ])
             .getManyAndCount();
-        return {
-            data: result,
-            total,
-            page,
-            limit,
+        const results = {
+            data: (0, class_transformer_1.instanceToPlain)(items),
+            totalItems: total,
+            curentPage: page,
             totalPages: Math.ceil(total / limit),
         };
+        return results;
     }
 };
 exports.HistoryLegalDocService = HistoryLegalDocService;

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HistoryBoInfo } from './history-bo-info.entity';
 import { Repository } from 'typeorm';
 import { BoInfos } from 'src/bo-infos/bo-infos.entity';
+import { classToPlain } from 'class-transformer';
 
 @Injectable()
 export class HistoryBoInfoService {
@@ -24,6 +25,19 @@ export class HistoryBoInfoService {
       .leftJoinAndSelect('history_bo_info.boInfo', 'bo_infos') // Join with bo_infos
       .leftJoinAndSelect('bo_infos.bisnisOwner', 'bisnis_owners'); // Join with bisnis_owners
 
+      // meeping status bahasa indonesia ke bahasa inggris
+      const statusMapping : {[key: string]: string} = {
+        disetujui: 'approved',
+        ditolak: 'rejected',
+        perbaikan: 'pending',
+        terdaftar: 'apply',
+        ditinjau: 'on review'
+      };
+
+      // Ubah nilai search berdasarkan mapping
+      const lowerSearch = search.toLowerCase();
+      const mappedSearch = statusMapping[lowerSearch] || lowerSearch; // Default ke search jika tidak ada di mapping
+
     // Filter berdasarkan tanggal jika disediakan
     if (start_date && end_date) {
       const startOfDay = new Date(start_date);
@@ -44,8 +58,9 @@ export class HistoryBoInfoService {
     // Filter berdasarkan pencarian jika disediakan
     if (search) {
       queryBuilder.andWhere(
-        'LOWER(history_bo_info.status) LIKE LOWER(:search) OR LOWER(history_bo_info.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)',
+        'LOWER(history_bo_info.status) LIKE LOWER(:mappedSearch) OR LOWER(history_bo_info.petugas) LIKE LOWER(:search) OR LOWER(bisnis_owners.name) LIKE LOWER(:search)',
         {
+          mappedSearch: `%${mappedSearch}%`,
           search: `%${search.toLowerCase()}%`, // Change to toLowerCase
         },
       );
@@ -56,7 +71,7 @@ export class HistoryBoInfoService {
     queryBuilder.skip(skip).take(limit);
 
     // Pilih field yang diperlukan termasuk nama bisnis owner
-    const [result, total] = await queryBuilder
+    const [items, total] = await queryBuilder
       .select([
         'history_bo_info.id',
         'history_bo_info.status',
@@ -68,12 +83,13 @@ export class HistoryBoInfoService {
       .getManyAndCount();
 
     // Mengembalikan hasil beserta meta informasi untuk pagination
-    return {
-      data: result,
-      total,
-      page,
-      limit,
+     const results = {
+      data: classToPlain(items),
+      totalItems : total,
+      curentPage: page,
       totalPages: Math.ceil(total / limit),
     };
+
+    return results;
   }
 }
