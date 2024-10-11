@@ -4,7 +4,7 @@ import { HistoryLegalDoc } from './history-legal-doc.entity';
 import { JwtAuthGuard } from 'src/access-console/guards/jwt-auth.guard';
 
 @Controller('history-legal-doc')
-export class HitoryLegalDocController {
+export class HistoryLegalDocController {
   constructor(
     private readonly historyLegalDocService: HistoryLegalDocService,
   ) {}
