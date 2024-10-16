@@ -26,11 +26,11 @@ let LegalDokumenController = class LegalDokumenController {
     async findOne(id) {
         return await this.legalDokumenService.findOne(id);
     }
-    async updateStatus(id, status, reason) {
+    async updateStatus(id, status, reason, petugas) {
         if (['pending', 'rejected'].includes(status) && !reason) {
             throw new common_1.BadRequestException('Alasan wajib diisi.');
         }
-        return this.legalDokumenService.updateStatus(id, status, reason);
+        return this.legalDokumenService.updateStatus(id, status, reason, petugas);
     }
 };
 exports.LegalDokumenController = LegalDokumenController;
@@ -55,8 +55,9 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)('status')),
     __param(2, (0, common_1.Body)('reason')),
+    __param(3, (0, common_1.Body)('petugas')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, String, String]),
+    __metadata("design:paramtypes", [Number, String, String, String]),
     __metadata("design:returntype", Promise)
 ], LegalDokumenController.prototype, "updateStatus", null);
 exports.LegalDokumenController = LegalDokumenController = __decorate([

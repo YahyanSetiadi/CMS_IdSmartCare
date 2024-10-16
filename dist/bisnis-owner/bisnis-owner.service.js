@@ -22,16 +22,15 @@ let BisnisOwnerService = class BisnisOwnerService {
         this.bisnisOwnerRepository = bisnisOwnerRepository;
     }
     async findAll(status) {
-        const options = {
-            relations: ['boInfos', 'legalDokumen'],
-        };
+        const queryBuilder = this.bisnisOwnerRepository.createQueryBuilder('bo')
+            .leftJoinAndSelect('bo.boInfos', 'boInfo')
+            .leftJoinAndSelect('boInfo.historyBoInfos', 'historyBoInfo')
+            .leftJoinAndSelect('bo.legalDokumen', 'legalDokumen')
+            .leftJoinAndSelect('legalDokumen.historyLegalDocs', 'history');
         if (status) {
-            options.where = [
-                { boInfos: { status: status } },
-                { legalDokumen: { status: status } },
-            ];
+            queryBuilder.where('boInfo.status = :status OR legalDokumen.status = :status', { status });
         }
-        return this.bisnisOwnerRepository.find(options);
+        return queryBuilder.getMany();
     }
     async create(createDto) {
         const newOwner = this.bisnisOwnerRepository.create(createDto);

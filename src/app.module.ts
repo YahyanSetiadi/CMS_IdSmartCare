@@ -12,6 +12,8 @@ import { AccessFasyankesModule } from './access_fasyankes/access_fasyankes.modul
 import { HitoryLegalDocController } from './history-legal-doc/history-legal-doc.controller';
 import { HistoryLegalDocModule } from './history-legal-doc/history-legal-doc.module';
 import { HistoryBoInfoModule } from './history-bo-info/history-bo-info.module';
+import { NotificationsController } from './notification/notifications.controller';
+import { NotificationsModule } from './notification/notifications.module';
 
 @Module({
   imports: [
@@ -23,7 +25,8 @@ import { HistoryBoInfoModule } from './history-bo-info/history-bo-info.module';
     AuthModule,
     AccessFasyankesModule,
     HistoryLegalDocModule,
-    HistoryBoInfoModule
+    HistoryBoInfoModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

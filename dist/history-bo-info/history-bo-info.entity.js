@@ -21,10 +21,9 @@ __decorate([
     __metadata("design:type", Number)
 ], HistoryBoInfo.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => bo_infos_entity_1.BoInfos, (boInfo) => boInfo.historyBoInfos),
-    (0, typeorm_1.JoinColumn)({ name: 'bo_info_id' }),
-    __metadata("design:type", bo_infos_entity_1.BoInfos)
-], HistoryBoInfo.prototype, "boInfo", void 0);
+    (0, typeorm_1.Column)({ name: 'bo_info_id', type: 'bigint' }),
+    __metadata("design:type", Number)
+], HistoryBoInfo.prototype, "boInfoId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 155 }),
     __metadata("design:type", String)
@@ -49,8 +48,13 @@ __decorate([
     __metadata("design:type", Date)
 ], HistoryBoInfo.prototype, "updated_at", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => bisnis_owner_entity_1.BisnisOwner, (bisnisOwner) => bisnisOwner.historyBoInfos),
-    (0, typeorm_1.JoinColumn)({ name: 'bisnis_owner_id' }),
+    (0, typeorm_1.ManyToOne)(() => bo_infos_entity_1.BoInfos, (boInfo) => boInfo.historyBoInfos),
+    (0, typeorm_1.JoinColumn)({ name: 'bo_info_id' }),
+    __metadata("design:type", bo_infos_entity_1.BoInfos)
+], HistoryBoInfo.prototype, "boInfo", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => bisnis_owner_entity_1.BisnisOwner, (bisnisOwner) => bisnisOwner.historyBoInfos, { nullable: true }),
+    (0, typeorm_1.JoinColumn)({ name: 'bo_info_id' }),
     __metadata("design:type", bisnis_owner_entity_1.BisnisOwner)
 ], HistoryBoInfo.prototype, "bisnisOwner", void 0);
 exports.HistoryBoInfo = HistoryBoInfo = __decorate([

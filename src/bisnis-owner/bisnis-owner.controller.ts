@@ -30,7 +30,7 @@ export class BisnisOwnerController {
     const owners = await this.bisnisOwnerService.findAll(status);
     return { data: owners };
   }
-
+  
   //  membuat api post
   @Post()
   @UseGuards(JwtAuthGuard)

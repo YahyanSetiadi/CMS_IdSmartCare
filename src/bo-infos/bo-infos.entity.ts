@@ -86,7 +86,4 @@ export class BoInfos {
 
   @OneToMany(() => HistoryLegalDoc, (historyLegalDoc) => historyLegalDoc.boInfo)
   historyLegalDocs: HistoryLegalDoc[];
-  
-
-
 }

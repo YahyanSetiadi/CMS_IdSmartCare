@@ -19,6 +19,6 @@ export declare class BisnisOwner {
     updated_at: Date;
     boInfos: BoInfos;
     legalDokumen: LegalDokumen;
-    historyBoInfos: HistoryBoInfo[];
     historyLegalDocs: HistoryLegalDoc[];
+    historyBoInfos: HistoryBoInfo[];
 }

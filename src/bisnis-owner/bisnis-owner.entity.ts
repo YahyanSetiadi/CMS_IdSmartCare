@@ -74,12 +74,12 @@ export class BisnisOwner {
   @OneToOne(() => LegalDokumen, (legalDokumen) => legalDokumen.bisnisOwner)
   legalDokumen: LegalDokumen;
 
-  @OneToMany(() => HistoryBoInfo, (historyBoInfo) => historyBoInfo.bisnisOwner)
-  historyBoInfos: HistoryBoInfo[];
-
+  
   // Relasi OneToMany dengan HistoryLegalDoc
   @OneToMany(() => HistoryLegalDoc, (historyLegalDoc) => historyLegalDoc.bisnisOwner)
   historyLegalDocs: HistoryLegalDoc[];
-
+  
+  @OneToMany(() => HistoryBoInfo, (historyBoInfo) => historyBoInfo.bisnisOwner)
+  historyBoInfos: HistoryBoInfo[];
   
 }

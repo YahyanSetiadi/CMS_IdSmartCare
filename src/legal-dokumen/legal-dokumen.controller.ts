@@ -31,17 +31,20 @@ export class LegalDokumenController {
 
   // update status
   @Put(':id/status')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard) // Melindungi endpoint dengan JWT Auth Guard
   async updateStatus(
     @Param('id') id: number,
     @Body('status') status: string,
     @Body('reason') reason?: string,
-  ): Promise<LegalDokumen> {
+    @Body('petugas') petugas?: string, // Tambahkan parameter petugas
+  ): Promise<{ legalDokumen: LegalDokumen }> {
+    // Validasi alasan jika status adalah 'pending' atau 'rejected'
     if (['pending', 'rejected'].includes(status) && !reason) {
       throw new BadRequestException('Alasan wajib diisi.');
     }
-
-    // panggil
-    return this.legalDokumenService.updateStatus(id, status, reason);
+    
+    // Panggil service untuk memperbarui status
+    return this.legalDokumenService.updateStatus(id, status, reason, petugas); // Tambahkan petugas
   }
+  
 }

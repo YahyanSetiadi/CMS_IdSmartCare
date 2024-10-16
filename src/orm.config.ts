@@ -7,6 +7,7 @@ import { AccessConsole } from './access-console/entities/access-console.entity';
 import { AccessFasyankes } from './access_fasyankes/access_fasyankes.entity';
 import { HistoryLegalDoc } from './history-legal-doc/history-legal-doc.entity';
 import { HistoryBoInfo } from './history-bo-info/history-bo-info.entity';
+import { Notifications } from './notification/notifications.entity';
 
 export const config: TypeOrmModuleOptions = {
   type: 'postgres',
@@ -25,6 +26,7 @@ export const config: TypeOrmModuleOptions = {
     AccessFasyankes,
     HistoryLegalDoc,
     HistoryBoInfo,
+    Notifications
   ],
   synchronize: false,
   // migrationsRun: true,

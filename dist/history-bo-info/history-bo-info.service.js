@@ -32,7 +32,7 @@ let HistoryBoInfoService = class HistoryBoInfoService {
             ditolak: 'rejected',
             perbaikan: 'pending',
             terdaftar: 'apply',
-            ditinjau: 'on review'
+            ditinjau: 'on review',
         };
         const lowerSearch = search.toLowerCase();
         const mappedSearch = statusMapping[lowerSearch] || lowerSearch;

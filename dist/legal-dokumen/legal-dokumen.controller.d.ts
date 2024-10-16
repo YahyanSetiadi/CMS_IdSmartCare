@@ -5,5 +5,7 @@ export declare class LegalDokumenController {
     constructor(legalDokumenService: LegalDokumenService);
     findAll(): Promise<LegalDokumen[]>;
     findOne(id: number): Promise<LegalDokumen>;
-    updateStatus(id: number, status: string, reason?: string): Promise<LegalDokumen>;
+    updateStatus(id: number, status: string, reason?: string, petugas?: string): Promise<{
+        legalDokumen: LegalDokumen;
+    }>;
 }

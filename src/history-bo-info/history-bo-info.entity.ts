@@ -15,10 +15,8 @@ export class HistoryBoInfo {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  // Relasi ke BoInfos
-  @ManyToOne(() => BoInfos, (boInfo) => boInfo.historyBoInfos)
-  @JoinColumn({ name: 'bo_info_id' })
-  boInfo: BoInfos;
+  @Column({ name: 'bo_info_id', type: 'bigint' })
+  boInfoId: number;
 
   @Column({ type: 'varchar', length: 155 })
   status: string;
@@ -39,7 +37,18 @@ export class HistoryBoInfo {
   })
   updated_at: Date;
 
-  @ManyToOne(() => BisnisOwner, (bisnisOwner) => bisnisOwner.historyBoInfos)
-  @JoinColumn({ name: 'bisnis_owner_id' }) // Nama kolom yang berisi ID bisnis owner
+ 
+  // Relasi ke BoInfos
+  @ManyToOne(() => BoInfos, (boInfo) => boInfo.historyBoInfos)
+  @JoinColumn({ name: 'bo_info_id' })
+  boInfo: BoInfos;
+
+  // Relasi ke BisnisOwner
+  // @Column({ name: 'bisnis_owner_id', type: 'bigint', nullable: true })
+  // bisnisOwnerId: number;
+
+
+  @ManyToOne(() => BisnisOwner, (bisnisOwner) => bisnisOwner.historyBoInfos, { nullable: true })
+  @JoinColumn({ name: 'bo_info_id' })
   bisnisOwner: BisnisOwner;
 }

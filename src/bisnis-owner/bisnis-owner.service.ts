@@ -14,19 +14,23 @@ export class BisnisOwnerService {
 
   // service untuk mengambil semua data bisnis_owners GET
   async findAll(status?: string): Promise<BisnisOwner[]> {
-    const options: any = {
-      relations: ['boInfos', 'legalDokumen'],
-    };
+    const queryBuilder = this.bisnisOwnerRepository.createQueryBuilder('bo')
+      .leftJoinAndSelect('bo.boInfos', 'boInfo')
+      .leftJoinAndSelect('boInfo.historyBoInfos', 'historyBoInfo')
+      .leftJoinAndSelect('bo.legalDokumen', 'legalDokumen')
+      .leftJoinAndSelect('legalDokumen.historyLegalDocs', 'history'); // Perbaikan di sini
   
     if (status) {
-      options.where = [
-        { boInfos: { status: status } },
-        { legalDokumen: { status: status } }, // Ini menambahkan kondisi OR
-      ];
+      queryBuilder.where(
+        'boInfo.status = :status OR legalDokumen.status = :status', 
+        { status }
+      );
     }
   
-    return this.bisnisOwnerRepository.find(options);
+    return queryBuilder.getMany();
   }
+  
+  
 
   // service untuk menyimpan data bisnis_owners baru POST
   async create(createDto: CreateBisnisOwnerDto): Promise<BisnisOwner> {

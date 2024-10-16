@@ -12,12 +12,14 @@ const typeorm_1 = require("@nestjs/typeorm");
 const bo_infos_controller_1 = require("./bo-infos.controller");
 const bo_infos_service_1 = require("./bo-infos.service");
 const bo_infos_entity_1 = require("./bo-infos.entity");
+const history_bo_info_entity_1 = require("../history-bo-info/history-bo-info.entity");
+const notifications_entity_1 = require("../notification/notifications.entity");
 let BoInfosModule = class BoInfosModule {
 };
 exports.BoInfosModule = BoInfosModule;
 exports.BoInfosModule = BoInfosModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([bo_infos_entity_1.BoInfos])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([bo_infos_entity_1.BoInfos, history_bo_info_entity_1.HistoryBoInfo, notifications_entity_1.Notifications])],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [bo_infos_controller_1.BoInfosController],
         providers: [bo_infos_service_1.BoInfosService],

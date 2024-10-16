@@ -5,5 +5,7 @@ export declare class BoInfosController {
     constructor(boInfosService: BoInfosService);
     findAll(): Promise<BoInfos[]>;
     findOne(id: number): Promise<BoInfos>;
-    updateStatus(id: number, status: string, reason?: string): Promise<BoInfos>;
+    updateStatus(id: number, status: string, reason?: string, petugas?: string): Promise<{
+        boInfo: BoInfos;
+    }>;
 }

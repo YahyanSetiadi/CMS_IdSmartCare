@@ -25,18 +25,18 @@ export class HistoryBoInfoService {
       .leftJoinAndSelect('history_bo_info.boInfo', 'bo_infos') // Join with bo_infos
       .leftJoinAndSelect('bo_infos.bisnisOwner', 'bisnis_owners'); // Join with bisnis_owners
 
-      // meeping status bahasa indonesia ke bahasa inggris
-      const statusMapping : {[key: string]: string} = {
-        disetujui: 'approved',
-        ditolak: 'rejected',
-        perbaikan: 'pending',
-        terdaftar: 'apply',
-        ditinjau: 'on review'
-      };
+    // meeping status bahasa indonesia ke bahasa inggris
+    const statusMapping: { [key: string]: string } = {
+      disetujui: 'approved',
+      ditolak: 'rejected',
+      perbaikan: 'pending',
+      terdaftar: 'apply',
+      ditinjau: 'on review',
+    };
 
-      // Ubah nilai search berdasarkan mapping
-      const lowerSearch = search.toLowerCase();
-      const mappedSearch = statusMapping[lowerSearch] || lowerSearch; // Default ke search jika tidak ada di mapping
+    // Ubah nilai search berdasarkan mapping
+    const lowerSearch = search.toLowerCase();
+    const mappedSearch = statusMapping[lowerSearch] || lowerSearch; // Default ke search jika tidak ada di mapping
 
     // Filter berdasarkan tanggal jika disediakan
     if (start_date && end_date) {
@@ -83,9 +83,9 @@ export class HistoryBoInfoService {
       .getManyAndCount();
 
     // Mengembalikan hasil beserta meta informasi untuk pagination
-     const results = {
+    const results = {
       data: classToPlain(items),
-      totalItems : total,
+      totalItems: total,
       curentPage: page,
       totalPages: Math.ceil(total / limit),
     };

@@ -90,13 +90,13 @@ __decorate([
     __metadata("design:type", legal_dokumen_entity_1.LegalDokumen)
 ], BisnisOwner.prototype, "legalDokumen", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(() => history_bo_info_entity_1.HistoryBoInfo, (historyBoInfo) => historyBoInfo.bisnisOwner),
-    __metadata("design:type", Array)
-], BisnisOwner.prototype, "historyBoInfos", void 0);
-__decorate([
     (0, typeorm_1.OneToMany)(() => history_legal_doc_entity_1.HistoryLegalDoc, (historyLegalDoc) => historyLegalDoc.bisnisOwner),
     __metadata("design:type", Array)
 ], BisnisOwner.prototype, "historyLegalDocs", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => history_bo_info_entity_1.HistoryBoInfo, (historyBoInfo) => historyBoInfo.bisnisOwner),
+    __metadata("design:type", Array)
+], BisnisOwner.prototype, "historyBoInfos", void 0);
 exports.BisnisOwner = BisnisOwner = __decorate([
     (0, typeorm_1.Entity)('bisnis_owners')
 ], BisnisOwner);

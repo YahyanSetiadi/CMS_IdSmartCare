@@ -12,18 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HistoryLegalDoc = void 0;
 const bisnis_owner_entity_1 = require("../bisnis-owner/bisnis-owner.entity");
 const bo_infos_entity_1 = require("../bo-infos/bo-infos.entity");
+const legal_dokumen_entity_1 = require("../legal-dokumen/legal-dokumen.entity");
 const typeorm_1 = require("typeorm");
 let HistoryLegalDoc = class HistoryLegalDoc {
 };
 exports.HistoryLegalDoc = HistoryLegalDoc;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], HistoryLegalDoc.prototype, "id", void 0);
 __decorate([
-    (0, typeorm_1.Column)(),
+    (0, typeorm_1.Column)({ name: 'legal_doc_bo_id' }),
     __metadata("design:type", Number)
-], HistoryLegalDoc.prototype, "legal_doc_bo_id", void 0);
+], HistoryLegalDoc.prototype, "legalDocBoId", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 155 }),
     __metadata("design:type", String)
@@ -47,8 +48,14 @@ __decorate([
 ], HistoryLegalDoc.prototype, "boInfo", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => bisnis_owner_entity_1.BisnisOwner, (bisnisOwner) => bisnisOwner.historyLegalDocs),
+    (0, typeorm_1.JoinColumn)({ name: 'legal_doc_bo_id' }),
     __metadata("design:type", bisnis_owner_entity_1.BisnisOwner)
 ], HistoryLegalDoc.prototype, "bisnisOwner", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(() => legal_dokumen_entity_1.LegalDokumen, (legalDokumen) => legalDokumen.historyLegalDocs),
+    (0, typeorm_1.JoinColumn)({ name: 'legal_doc_bo_id' }),
+    __metadata("design:type", legal_dokumen_entity_1.LegalDokumen)
+], HistoryLegalDoc.prototype, "legalDokumen", void 0);
 exports.HistoryLegalDoc = HistoryLegalDoc = __decorate([
     (0, typeorm_1.Entity)('history_legal_doc')
 ], HistoryLegalDoc);

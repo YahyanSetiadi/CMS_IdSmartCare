@@ -12,12 +12,14 @@ const typeorm_1 = require("@nestjs/typeorm");
 const legal_dokumen_service_1 = require("./legal-dokumen.service");
 const legal_dokumen_controller_1 = require("./legal-dokumen.controller");
 const legal_dokumen_entity_1 = require("./legal-dokumen.entity");
+const history_legal_doc_entity_1 = require("../history-legal-doc/history-legal-doc.entity");
+const notifications_entity_1 = require("../notification/notifications.entity");
 let LegalDokumenModule = class LegalDokumenModule {
 };
 exports.LegalDokumenModule = LegalDokumenModule;
 exports.LegalDokumenModule = LegalDokumenModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([legal_dokumen_entity_1.LegalDokumen])],
+        imports: [typeorm_1.TypeOrmModule.forFeature([legal_dokumen_entity_1.LegalDokumen, history_legal_doc_entity_1.HistoryLegalDoc, notifications_entity_1.Notifications]),],
         exports: [typeorm_1.TypeOrmModule],
         controllers: [legal_dokumen_controller_1.LegalDokumenController],
         providers: [legal_dokumen_service_1.LegalDokumenService],

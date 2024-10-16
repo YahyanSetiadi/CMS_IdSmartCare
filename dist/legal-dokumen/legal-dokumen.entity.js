@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LegalDokumen = void 0;
 const bisnis_owner_entity_1 = require("../bisnis-owner/bisnis-owner.entity");
+const history_legal_doc_entity_1 = require("../history-legal-doc/history-legal-doc.entity");
 const typeorm_1 = require("typeorm");
 let LegalDokumen = class LegalDokumen {
 };
@@ -72,6 +73,10 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'bisnis_owner_id' }),
     __metadata("design:type", bisnis_owner_entity_1.BisnisOwner)
 ], LegalDokumen.prototype, "bisnisOwner", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => history_legal_doc_entity_1.HistoryLegalDoc, (historyLegalDoc) => historyLegalDoc.legalDokumen),
+    __metadata("design:type", Array)
+], LegalDokumen.prototype, "historyLegalDocs", void 0);
 exports.LegalDokumen = LegalDokumen = __decorate([
     (0, typeorm_1.Entity)('legal_doc_bo')
 ], LegalDokumen);

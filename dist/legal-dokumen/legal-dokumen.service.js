@@ -17,28 +17,50 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const legal_dokumen_entity_1 = require("./legal-dokumen.entity");
+const history_legal_doc_entity_1 = require("../history-legal-doc/history-legal-doc.entity");
+const notifications_entity_1 = require("../notification/notifications.entity");
 let LegalDokumenService = class LegalDokumenService {
-    constructor(legalDokumenRepository) {
+    constructor(legalDokumenRepository, historyLegalDocRepository, notificationsRepository) {
         this.legalDokumenRepository = legalDokumenRepository;
+        this.historyLegalDocRepository = historyLegalDocRepository;
+        this.notificationsRepository = notificationsRepository;
+    }
+    async updateStatus(id, newStatus, reason, petugas) {
+        const legalDokumen = await this.legalDokumenRepository.findOne({
+            where: { id },
+        });
+        if (!legalDokumen) {
+            throw new common_1.NotFoundException(`Legal Dokumen dengan ID ${id} tidak ditemukan`);
+        }
+        legalDokumen.status = newStatus;
+        legalDokumen.reason =
+            (['pending', 'rejected'].includes(newStatus) ? reason : null) || null;
+        await this.legalDokumenRepository.save(legalDokumen);
+        const historyEntry = new history_legal_doc_entity_1.HistoryLegalDoc();
+        historyEntry.legalDocBoId = legalDokumen.id;
+        historyEntry.status = newStatus;
+        historyEntry.petugas = petugas || 'NamaPetugas';
+        historyEntry.created_at = new Date();
+        historyEntry.updated_at = new Date();
+        await this.historyLegalDocRepository.save(historyEntry);
+        const notificationEntry = new notifications_entity_1.Notifications();
+        notificationEntry.bisnisOwnerId = legalDokumen.bisnis_owner_id;
+        notificationEntry.title = `Status Legal Dokumen ${legalDokumen.id} Diperbarui`;
+        notificationEntry.massage = `Status baru: ${newStatus}${['pending', 'rejected'].includes(newStatus) ? `. Alasan: ${reason || 'Tidak ada'}` : ''}`;
+        notificationEntry.is_read = false;
+        notificationEntry.type = 'update';
+        notificationEntry.path = `/legal-documents/${legalDokumen.id}`;
+        await this.notificationsRepository.save(notificationEntry);
+        const history = await this.historyLegalDocRepository
+            .createQueryBuilder('history')
+            .select(['history.id', 'history.legal_doc_bo_id', 'history.status', 'history.petugas', 'history.created_at', 'history.updated_at'])
+            .where('history.legal_doc_bo_id = :id', { id })
+            .getMany();
+        legalDokumen.history = history;
+        return { legalDokumen };
     }
     async findOne(id) {
         return await this.legalDokumenRepository.findOne({ where: { id } });
-    }
-    async updateStatus(id, newStatus, reason) {
-        const LegalDokumen = await this.legalDokumenRepository.findOne({
-            where: { id },
-        });
-        if (!LegalDokumen) {
-            throw new common_1.NotFoundException(`legal Dokumen dengan ID ${id} tidak ditemukan`);
-        }
-        LegalDokumen.status = newStatus;
-        if (['pending', 'rejected'].includes(newStatus)) {
-            LegalDokumen.reason = reason;
-        }
-        else {
-            LegalDokumen.reason = null;
-        }
-        return this.legalDokumenRepository.save(LegalDokumen);
     }
     async findAll() {
         return this.legalDokumenRepository.find({ relations: ['bisnisOwner'] });
@@ -48,6 +70,10 @@ exports.LegalDokumenService = LegalDokumenService;
 exports.LegalDokumenService = LegalDokumenService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(legal_dokumen_entity_1.LegalDokumen)),
-    __metadata("design:paramtypes", [typeorm_2.Repository])
+    __param(1, (0, typeorm_1.InjectRepository)(history_legal_doc_entity_1.HistoryLegalDoc)),
+    __param(2, (0, typeorm_1.InjectRepository)(notifications_entity_1.Notifications)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
+        typeorm_2.Repository])
 ], LegalDokumenService);
 //# sourceMappingURL=legal-dokumen.service.js.map

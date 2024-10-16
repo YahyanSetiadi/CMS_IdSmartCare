@@ -20,6 +20,7 @@ const auth_module_1 = require("./access-console/auth/auth.module");
 const access_fasyankes_module_1 = require("./access_fasyankes/access_fasyankes.module");
 const history_legal_doc_module_1 = require("./history-legal-doc/history-legal-doc.module");
 const history_bo_info_module_1 = require("./history-bo-info/history-bo-info.module");
+const notifications_module_1 = require("./notification/notifications.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -34,7 +35,8 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             access_fasyankes_module_1.AccessFasyankesModule,
             history_legal_doc_module_1.HistoryLegalDocModule,
-            history_bo_info_module_1.HistoryBoInfoModule
+            history_bo_info_module_1.HistoryBoInfoModule,
+            notifications_module_1.NotificationsModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
